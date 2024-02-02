@@ -201,21 +201,24 @@ private extension Callouts.HiddenCharCallout {
     @ViewBuilder
     var calloutView: some View {
         if let alternativeInput = calloutContext.alternativeInput {
-            HStack {
+            HStack(spacing: 2) {
                 Text(alternativeInput)
                     .font(style.font.font)
-                    .frame(minWidth: calloutSize.width, minHeight: calloutSize.height)
+                    .frame(minWidth: calloutSize.width / 2, minHeight: calloutSize.height)
                     .foregroundColor(calloutContext.isHiddenCharSelected ? Color.white : style.callout.textColor)
                     .background(calloutContext.isHiddenCharSelected ? Color.blue : style.callout.backgroundColor)
                     .cornerRadius(cornerRadius)
 
                 Text(calloutContext.input ?? "")
                     .font(style.font.font)
-                    .frame(minWidth: calloutSize.width, minHeight: calloutSize.height)
+                    .frame(minWidth: calloutSize.width / 2, minHeight: calloutSize.height)
                     .foregroundColor(!calloutContext.isHiddenCharSelected ? Color.white : style.callout.textColor)
                     .background(!calloutContext.isHiddenCharSelected ? Color.blue : style.callout.backgroundColor)
                     .cornerRadius(cornerRadius)
             }
+            .padding(2)
+            .background(Color.white)
+            .cornerRadius(cornerRadius)
         } else {
             Text("WATAFAK")
         }
