@@ -19,12 +19,6 @@ class DemoLayoutProvider: StandardKeyboardLayoutProvider {
     ) {
         super.init(baseProvider: baseProvider, localizedProviders: localizedProviders)
     }
-
-    override func keyboardLayout(for context: KeyboardContext) -> KeyboardLayout {
-        let layout = super.keyboardLayout(for: context)
-        layout.tryInsertEmojiButton()
-        return layout
-    }
 }
 
 private extension KeyboardLayout {

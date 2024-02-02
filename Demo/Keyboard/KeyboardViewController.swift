@@ -61,6 +61,7 @@ class KeyboardViewController: KeyboardInputViewController {
         /// needed, as well as a rocket emoji button.
         services.layoutProvider = DemoLayoutProvider()
 
+        state.keyboardContext.needsInputModeSwitchKey = false
         /// 💡 Setup a custom keyboard locale.
         ///
         /// Without KeyboardKit Pro, changing locale will by

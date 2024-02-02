@@ -96,9 +96,6 @@ public struct SystemKeyboard<
         @ViewBuilder emojiKeyboard: @escaping EmojiKeyboardBuilder,
         @ViewBuilder toolbar: @escaping ToolbarBuilder
     ) {
-        if !Emoji.KeyboardWrapper.isPro {
-            layout.itemRows.remove(.keyboardType(.emojis))
-        }
         self.layout = layout
         self.layoutConfig = .standard(for: keyboardContext)
         self.actionHandler = actionHandler
