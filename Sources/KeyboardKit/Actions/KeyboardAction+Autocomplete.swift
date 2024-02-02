@@ -16,7 +16,8 @@ public extension KeyboardAction {
      */
     var shouldApplyAutocorrectSuggestion: Bool {
         switch self {
-        case .character(let char): return char.isWordDelimiter
+        case .character(let char), .characterWithHidden(let char, _):
+            return char.isWordDelimiter
         case .primary(let type): return type.isSystemAction
         case .space: return true
         default: return false
@@ -37,7 +38,8 @@ public extension KeyboardAction {
      */
     var shouldRemoveAutocompleteInsertedSpace: Bool {
         switch self {
-        case .character(let char): return char.isWordDelimiter && self != .space
+        case .character(let char), .characterWithHidden(let char, _): 
+            return char.isWordDelimiter && self != .space
         default: return false
         }
     }

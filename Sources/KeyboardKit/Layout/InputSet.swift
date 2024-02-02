@@ -67,6 +67,14 @@ public extension InputSet {
         ])
     }
     
+    static func rusisanNumeric(currency: String) -> InputSet {
+        .init(rows: [
+            .init(chars: "1234567890"),
+            .init(phone: "-/:;()\(currency)&@”", pad: "@#\(currency)&*()’”"),
+            .init(phone: ".,?!’", pad: "%-+=/;:!?")
+        ])
+    }
+    
     static func standardSymbolic(currencies: [String]) -> InputSet {
         .init(rows: [
             .init(phone: "[]{}#%^*+=", pad: "1234567890"),

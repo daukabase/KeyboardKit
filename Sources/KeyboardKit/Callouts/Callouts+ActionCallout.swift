@@ -130,8 +130,6 @@ private extension Callouts.ActionCallout {
         switch action {
         case .character(let char): calloutView(for: char)
         case .emoji(let emoji): calloutView(for: emoji)
-        case let .characterWithHidden(char, hiddenChar):
-            calloutViewWithAdditionalAction(for: char, additionalChar: hiddenChar)
         default: EmptyView()
         }
     }
@@ -185,7 +183,7 @@ private extension KeyboardAction {
     
     var input: String? {
         switch self {
-        case .character(let char): return char
+        case .character(let char), .characterWithHidden(let char, _): return char
         default: return nil
         }
     }

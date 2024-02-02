@@ -169,7 +169,7 @@ open class BaseKeyboardLayoutProvider: KeyboardLayoutProvider {
         context: KeyboardContext
     ) -> KeyboardLayout.ItemWidth {
         switch action {
-        case .character: return .input
+        case .character, .characterWithHidden: return .input
         default: return .available
         }
     }

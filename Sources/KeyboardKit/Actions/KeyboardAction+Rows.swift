@@ -38,8 +38,8 @@ public extension KeyboardAction.Row {
     func characterMarginAction(for action: KeyboardAction?) -> KeyboardAction {
         guard let action = action else { return .none }
         switch action {
-        case .character(let char): return .characterMargin(char)
-        case let .characterWithHidden(char, hiddenChar): return .characterMargin(char)
+        case .character(let char), .characterWithHidden(let char, _): 
+            return .characterMargin(char)
         default: return .none
         }
     }

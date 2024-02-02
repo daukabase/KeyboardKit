@@ -83,13 +83,8 @@ public extension KeyboardAction {
         switch self {
         case .character(let char): return { $0?.insertText(char) }
         case let .characterWithHidden(char, hiddenChar): return {
-            // check for release location
-            
-            if true {
-                $0?.insertText(char)
-            } else {
-                $0?.insertText(hiddenChar)
-            }
+            assertionFailure("must be handled earlier")
+            $0?.insertText(char)
         }
         case .characterMargin(let char): return { $0?.insertText(char) }
         case .dictation: return { $0?.performDictation() }

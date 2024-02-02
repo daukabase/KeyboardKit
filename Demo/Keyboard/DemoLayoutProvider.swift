@@ -13,25 +13,16 @@ import KeyboardKit
  adds a rocket and a locale key around the space key.
  */
 class DemoLayoutProvider: StandardKeyboardLayoutProvider {
-
     override func keyboardLayout(for context: KeyboardContext) -> KeyboardLayout {
         let layout = super.keyboardLayout(for: context)
-        layout.tryInsertRocketButton()
-        layout.tryInsertLocaleSwitcher(for: context)
+        layout.tryInsertEmojiButton()
         return layout
     }
 }
 
 private extension KeyboardLayout {
-    
-    func tryInsertLocaleSwitcher(for context: KeyboardContext) {
-        guard context.hasMultipleLocales else { return }
-        guard let button = tryCreateBottomRowItem(for:  .nextLocale) else { return }
-        itemRows.insert(button, after: .space, atRow: bottomRowIndex)
-    }
-    
-    func tryInsertRocketButton() {
-        guard let button = tryCreateBottomRowItem(for:  .character("🚀")) else { return }
+    func tryInsertEmojiButton() {
+        guard let button = tryCreateBottomRowItem(for:  .keyboardType(.emojis)) else { return }
         itemRows.insert(button, before: .space, atRow: bottomRowIndex)
     }
 }

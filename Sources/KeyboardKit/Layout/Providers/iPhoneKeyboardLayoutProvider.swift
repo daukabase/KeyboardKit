@@ -42,7 +42,8 @@ open class iPhoneKeyboardLayoutProvider: BaseKeyboardLayoutProvider {
     ) -> KeyboardLayout.ItemWidth {
         switch action {
         case context.keyboardDictationReplacement: return bottomSystemButtonWidth(for: context)
-        case .character: return isLastNumericInputRow(row, for: context) ? lastSymbolicInputWidth(for: context) : .input
+        case .character, .characterWithHidden:
+            return isLastNumericInputRow(row, for: context) ? lastSymbolicInputWidth(for: context) : .input
         case .backspace: return lowerSystemButtonWidth(for: context)
         case .keyboardType: return bottomSystemButtonWidth(for: context)
         case .nextKeyboard: return bottomSystemButtonWidth(for: context)
@@ -99,7 +100,11 @@ open class iPhoneKeyboardLayoutProvider: BaseKeyboardLayoutProvider {
         guard isExpectedActionSet(actions) else { return [] }
         let margin = actions[2].leadingCharacterMarginAction
         guard let switcher = keyboardSwitchActionForBottomInputRow(for: context) else { return [] }
-        return [switcher, margin]
+        if context.isAlphabetic(.russian) {
+            return [switcher]
+        } else {
+            return [switcher, margin]
+        }
     }
 
     /// Trailing actions to add to the lower input row.
@@ -109,14 +114,18 @@ open class iPhoneKeyboardLayoutProvider: BaseKeyboardLayoutProvider {
     ) -> KeyboardAction.Row {
         guard isExpectedActionSet(actions) else { return [] }
         let margin = actions[2].trailingCharacterMarginAction
-        return [margin, .backspace]
+        if context.isAlphabetic(.russian) {
+            return [.backspace]
+        } else {
+            return [margin, .backspace]
+        }
     }
 
     /// The width of system buttons on the lower input row.
     open func lowerSystemButtonWidth(
         for context: KeyboardContext
     ) -> KeyboardLayout.ItemWidth {
-        if context.isAlphabetic(.ukrainian) { return .input }
+        if context.isAlphabetic(.russian) { return .input }
         return .percentage(0.13)
     }
 

@@ -67,13 +67,6 @@ public extension CalloutContext.InputContext {
         action?.inputCalloutText
     }
 
-    var alternativeInput: String? {
-        switch action {
-        case let .characterWithHidden(_, hiddenChar): return hiddenChar
-        default: return nil
-        }
-    }
-
     /// Whether or not the context has input and is enabled.
     var isActive: Bool {
         hasInput && isEnabled

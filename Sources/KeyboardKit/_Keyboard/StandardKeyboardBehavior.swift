@@ -185,7 +185,8 @@ private extension KeyboardAction {
     
     func isAlternateQuotationDelimiter(for context: KeyboardContext) -> Bool {
         switch self {
-        case .character(let char): return char.isAlternateQuotationDelimiter(for: context)
+        case .character(let char), .characterWithHidden(let char, _): 
+            return char.isAlternateQuotationDelimiter(for: context)
         default: return false
         }
     }

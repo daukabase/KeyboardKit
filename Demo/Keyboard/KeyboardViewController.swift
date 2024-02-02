@@ -65,15 +65,15 @@ class KeyboardViewController: KeyboardInputViewController {
         ///
         /// The demo provider styles the rocket emoji button
         /// and has some commented out code that you can try.
-        services.styleProvider = DemoStyleProvider(
-            keyboardContext: state.keyboardContext)
+//        services.styleProvider = DemoStyleProvider(
+//            keyboardContext: state.keyboardContext)
         
 
         /// 💡 Setup a custom keyboard locale.
         ///
         /// Without KeyboardKit Pro, changing locale will by
         /// default only affects localized texts.
-        state.keyboardContext.setLocale(.english)
+        state.keyboardContext.setLocale(.russian)
 
         /// 💡 Add more locales to the keyboard.
         ///
@@ -86,26 +86,19 @@ class KeyboardViewController: KeyboardInputViewController {
         ///
         /// Since dictation is not available by default, the
         /// dictation button is removed if we don't set this.
-        state.keyboardContext.keyboardDictationReplacement = .character("$")
+//        state.keyboardContext.keyboardDictationReplacement = .character("$")
         
         /// 💡 Configure the space long press behavior.
         ///
         /// The locale context menu will only open up if the
         /// keyboard has multiple locales.
         state.keyboardContext.spaceLongPressBehavior = .moveInputCursor
-        // state.keyboardContext.spaceLongPressBehavior = .openLocaleContextMenu
         
         /// 💡 Setup audio and haptic feedback.
         ///
         /// The code below enabled haptic feedback and plays
         /// a rocket sound when a rocket button is tapped.
         state.feedbackConfiguration.isHapticFeedbackEnabled = true
-        state.feedbackConfiguration.audio.actions = [
-            .init(action: .character("🚀"), feedback: .custom(id: 1303))
-        ]
-        
-        // state.feedbackConfiguration.disableAudioFeedback()
-        // state.feedbackConfiguration.disableHapticFeedback()
         
         /// 💡 Call super to perform the base initialization.
         super.viewDidLoad()
@@ -131,7 +124,6 @@ class KeyboardViewController: KeyboardInputViewController {
                 emojiKeyboard: { $0.view },
                 toolbar: { $0.view }
             )
-            // .autocorrectionDisabled()
         }
     }
 }

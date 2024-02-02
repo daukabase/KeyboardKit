@@ -11,8 +11,8 @@ public class RussianKeyboardLayoutProvider: InputSetBasedKeyboardLayoutProvider 
     public init() {
         super.init(
             alphabeticInputSet: .russian,
-            numericInputSet: .standardNumeric(currency: "€"),
-            symbolicInputSet: .standardSymbolic(currencies: ["€", "$", "£", "¥"])
+            numericInputSet: .standardNumeric(currency: "₽"),
+            symbolicInputSet: .standardSymbolic(currencies: ["€", "$", "£"])
         )
         self.localeKey = KeyboardLocale.russian.id
     }
