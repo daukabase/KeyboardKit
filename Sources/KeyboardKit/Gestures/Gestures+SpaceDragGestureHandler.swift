@@ -111,6 +111,8 @@ public extension Gestures {
         /// The currently applied drag text position offset.
         public var currentDragTextPositionOffset: Int = 0
         
+        public private(set) var isHiddenCharSelected = false
+        
         /**
          Handle a drag gesture on space, which by default should
          move the cursor left and right after a long press.
@@ -121,8 +123,9 @@ public extension Gestures {
         ) {
             tryStartNewDragGesture(from: startLocation, to: currentLocation)
             
-            let isHiddenCharSelected = currentLocation.x < startLocation.x
+            let isHiddenCharSelected = currentLocation.x < startLocation.x - 4
 
+            self.isHiddenCharSelected = isHiddenCharSelected
             action(isHiddenCharSelected)
         }
 

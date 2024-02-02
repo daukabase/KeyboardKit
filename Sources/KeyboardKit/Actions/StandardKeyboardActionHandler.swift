@@ -255,10 +255,25 @@ open class StandardKeyboardActionHandler: NSObject, KeyboardActionHandler {
         for gesture: Gesture,
         on action: KeyboardAction
     ) -> KeyboardAction.GestureAction? {
-        let standard = action.standardAction(for: gesture)
+        let releaseAction =  releaseActionAfterLongPress(for: gesture, on: action)
+        let standard = releaseAction ?? action.standardAction(for: gesture)
         if action != .space && gesture != .release { return standard }
         let isSpaceDragActive = keyboardContext.isSpaceDragGestureActive
         return isSpaceDragActive ? nil : standard
+    }
+    
+    private func releaseActionAfterLongPress(
+        for gesture: Gesture,
+        on action: KeyboardAction
+    ) -> KeyboardAction.GestureAction? {
+        guard gesture == .release, case let .characterWithHidden(char, hiddenChar) = action else { return nil }
+        return { [hiddenCharDragGestureHandler] controller in
+            if hiddenCharDragGestureHandler.isHiddenCharSelected {
+                controller?.insertText(hiddenChar)
+            } else {
+                controller?.insertText(char)
+            }
+        }
     }
 
     /**
