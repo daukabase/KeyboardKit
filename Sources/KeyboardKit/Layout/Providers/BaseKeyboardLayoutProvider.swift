@@ -66,8 +66,24 @@ open class BaseKeyboardLayoutProvider: KeyboardLayoutProvider {
         for rows: InputSet.Rows,
         context: KeyboardContext
     ) -> KeyboardAction.Rows {
-        let characters = actionCharacters(for: rows, context: context)
-        return .init(characters: characters)
+        guard case let .alphabetic(casing) = context.keyboardType else {
+            return .init(characters: rows.characters())
+        }
+
+        let actionCharacters = rows.map { row in
+            row.map {
+                if let hidden = $0.hiddenCharacter {
+                    let hiddenChar = hidden.character(for: casing)
+                    return KeyboardAction.characterWithHidden(
+                        $0.character(for: casing),
+                        hiddenCharacter: hiddenChar
+                    )
+                } else {
+                    return KeyboardAction.character($0.character(for: casing))
+                }
+            }
+        }
+        return actionCharacters
     }
     
     /// Get action chars for the provided rows and context.

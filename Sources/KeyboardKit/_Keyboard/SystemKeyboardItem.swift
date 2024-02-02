@@ -32,6 +32,7 @@ public struct SystemKeyboardItem<Content: View>: View {
         styleProvider: KeyboardStyleProvider,
         keyboardContext: KeyboardContext,
         calloutContext: CalloutContext?,
+        hiddenCharContext: CalloutContext.HiddenCharContext?,
         keyboardWidth: CGFloat,
         inputWidth: CGFloat,
         content: Content
@@ -41,6 +42,7 @@ public struct SystemKeyboardItem<Content: View>: View {
         self.styleProvider = styleProvider
         self._keyboardContext = ObservedObject(wrappedValue: keyboardContext)
         self.calloutContext = calloutContext
+        self.hiddenCharContext = hiddenCharContext
         self.keyboardWidth = keyboardWidth
         self.inputWidth = inputWidth
         self.content = content
@@ -50,6 +52,7 @@ public struct SystemKeyboardItem<Content: View>: View {
     private let actionHandler: KeyboardActionHandler
     private let styleProvider: KeyboardStyleProvider
     private let calloutContext: CalloutContext?
+    private let hiddenCharContext: CalloutContext.HiddenCharContext?
     private let keyboardWidth: CGFloat
     private let inputWidth: CGFloat
     private let content: Content
@@ -74,6 +77,7 @@ public struct SystemKeyboardItem<Content: View>: View {
                 actionHandler: actionHandler,
                 keyboardContext: keyboardContext,
                 calloutContext: calloutContext,
+                hiddenCharContext: hiddenCharContext,
                 edgeInsets: item.edgeInsets,
                 isPressed: $isPressed
             )

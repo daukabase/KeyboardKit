@@ -33,6 +33,7 @@ public extension View {
         actionHandler: KeyboardActionHandler,
         keyboardContext: KeyboardContext,
         calloutContext: CalloutContext?,
+        hiddenCharContext: CalloutContext.HiddenCharContext?,
         edgeInsets: EdgeInsets = .init(),
         isPressed: Binding<Bool> = .constant(false),
         isInScrollView: Bool = false,
@@ -45,7 +46,8 @@ public extension View {
             .keyboardButtonGestures(
                 for: action,
                 actionHandler: actionHandler,
-                calloutContext: calloutContext,
+                calloutContext: calloutContext, 
+                hiddenCharContext: hiddenCharContext,
                 isPressed: isPressed,
                 isInScrollView: isInScrollView,
                 releaseOutsideTolerance: releaseOutsideTolerance
@@ -154,7 +156,7 @@ struct View_KeyboardButton_Previews: PreviewProvider {
                     style: style,
                     actionHandler: .preview,
                     keyboardContext: context,
-                    calloutContext: .preview,
+                    calloutContext: .preview, hiddenCharContext: nil,
                     edgeInsets: insets,
                     isPressed: $isPressed
                 )

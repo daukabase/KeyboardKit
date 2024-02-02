@@ -41,7 +41,24 @@ public extension InputSet {
             .init(phone: "zxcvbnm", pad: "zxcvbnm,.")
         ])
     }
-    
+
+    static var russian: InputSet {
+        .init(rows: [
+            .init(chars: "йцукенгшщзх"),
+            .init(chars: "фывапролджэ"),
+            russianThirdRow
+        ])
+    }
+
+    static var russianThirdRow: InputSet.Row {
+        let firstPart: [InputSet.Item] = InputSet.Row(chars: "ячсмит")
+        let secondPart = [InputSet.Item("ь", hidden: InputSet.Item("ъ"))]
+        let thirdPart: [InputSet.Item] = InputSet.Row(chars: "бю")
+
+        let row = firstPart + secondPart + thirdPart
+        return row
+    }
+
     static func standardNumeric(currency: String) -> InputSet {
         .init(rows: [
             .init(chars: "1234567890"),

@@ -31,6 +31,8 @@ public enum KeyboardAction: Codable, Equatable {
     /// Inserts a text character when released.
     case character(String)
     
+    case characterWithHidden(String, hiddenCharacter: String)
+    
     /// Inserts a text character when released, but is rendered as empty space.
     case characterMargin(String)
     
@@ -130,8 +132,10 @@ public extension KeyboardAction {
     
     /// Whether or not the action is a character action.
     var isCharacterAction: Bool {
+        // check
         switch self {
         case .character: return true
+        case .characterWithHidden: return true
         default: return false
         }
     }
@@ -153,6 +157,7 @@ public extension KeyboardAction {
     var isInputAction: Bool {
         switch self {
         case .character: return true
+        case .characterWithHidden: return true
         case .characterMargin: return true
         case .emoji: return true
         case .image: return true
@@ -248,6 +253,7 @@ public extension KeyboardAction {
         switch self {
         case .backspace: return "Backspace"
         case .character(let char): return char
+        case let .characterWithHidden(char, hiddenChar): return char + "|" + hiddenChar
         case .characterMargin: return nil
         case .command: return "Command"
         case .control: return "Control"

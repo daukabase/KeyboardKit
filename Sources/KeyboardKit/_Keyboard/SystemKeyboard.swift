@@ -57,6 +57,7 @@ public struct SystemKeyboard<
             keyboardContext: state.keyboardContext,
             autocompleteContext: state.autocompleteContext,
             calloutContext: state.calloutContext,
+            hiddenCharContext: state.hiddenCharContext,
             renderBackground: renderBackground,
             buttonContent: buttonContent,
             buttonView: buttonView,
@@ -88,6 +89,7 @@ public struct SystemKeyboard<
         keyboardContext: KeyboardContext,
         autocompleteContext: AutocompleteContext,
         calloutContext: CalloutContext?,
+        hiddenCharContext: CalloutContext.HiddenCharContext?,
         renderBackground: Bool = true,
         @ViewBuilder buttonContent: @escaping ButtonContentBuilder,
         @ViewBuilder buttonView: @escaping ButtonViewBuilder,
@@ -109,6 +111,7 @@ public struct SystemKeyboard<
         _autocompleteContext = ObservedObject(wrappedValue: autocompleteContext)
         _calloutContext = ObservedObject(wrappedValue: calloutContext ?? .disabled)
         _keyboardContext = ObservedObject(wrappedValue: keyboardContext)
+        _hiddenCharActionContext = ObservedObject(wrappedValue: hiddenCharContext!)
     }
 
 
@@ -197,6 +200,9 @@ public struct SystemKeyboard<
     @ObservedObject
     private var keyboardContext: KeyboardContext
 
+    @ObservedObject
+    private var hiddenCharActionContext: CalloutContext.HiddenCharContext
+
     public var body: some View {
         geoContent
             .autocorrectionDisabled(with: autocompleteContext)
@@ -209,6 +215,10 @@ public struct SystemKeyboard<
                 keyboardContext: keyboardContext,
                 actionCalloutStyle: actionCalloutStyle,
                 inputCalloutStyle: inputCalloutStyle
+            )
+            .keyboardHiddenCharContainer(
+                hiddenCharContext: hiddenCharActionContext,
+                keyboardContext: keyboardContext
             )
     }
 }
@@ -294,7 +304,8 @@ private extension SystemKeyboard {
                 actionHandler: actionHandler,
                 styleProvider: styleProvider,
                 keyboardContext: keyboardContext,
-                calloutContext: calloutContext,
+                calloutContext: calloutContext, 
+                hiddenCharContext: hiddenCharActionContext,
                 keyboardWidth: keyboardSize.width,
                 inputWidth: layout.inputWidth(for: keyboardSize.width),
                 content: buttonContent(for: item)

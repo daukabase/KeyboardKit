@@ -130,12 +130,21 @@ private extension Callouts.ActionCallout {
         switch action {
         case .character(let char): calloutView(for: char)
         case .emoji(let emoji): calloutView(for: emoji)
+        case let .characterWithHidden(char, hiddenChar):
+            calloutViewWithAdditionalAction(for: char, additionalChar: hiddenChar)
         default: EmptyView()
         }
     }
 
     func calloutView(for character: String) -> some View {
         Text(character)
+    }
+
+    func calloutViewWithAdditionalAction(for char: String, additionalChar: String) -> some View {
+        HStack(alignment: .center, spacing: 4, content: {
+            Text(char)
+            Text(additionalChar)
+        })
     }
 
     func calloutView(for emoji: Emoji) -> some View {

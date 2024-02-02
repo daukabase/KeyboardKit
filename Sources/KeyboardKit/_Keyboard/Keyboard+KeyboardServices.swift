@@ -48,7 +48,8 @@ public extension Keyboard {
             keyboardBehavior: keyboardBehavior,
             autocompleteContext: state.autocompleteContext,
             feedbackConfiguration: state.feedbackConfiguration,
-            spaceDragGestureHandler: spaceDragGestureHandler
+            spaceDragGestureHandler: spaceDragGestureHandler, 
+            hiddenCharDragGestureHandler: hiddenCharDragGestureHandler
         ) {
             didSet { setupCalloutContextForServices() }
         }
@@ -81,6 +82,12 @@ public extension Keyboard {
             action: { _ in }
         )
         
+        /// The space drag gesture handler to use.
+        public lazy var hiddenCharDragGestureHandler = Gestures.HiddenCharDragGestureHandler(
+            sensitivity: .medium,
+            action: { _ in }
+        )
+        
         /// The keyboard style provider to use.
         public lazy var styleProvider: KeyboardStyleProvider = StandardKeyboardStyleProvider(
             keyboardContext: state.keyboardContext)
@@ -93,6 +100,7 @@ public extension Keyboard.KeyboardServices {
     func setup(for controller: KeyboardInputViewController) {
         setupActionHandler(for: controller)
         setupSpaceGesture(for: controller)
+        setupHiddenCharGesture(for: controller)
     }
     
     func setupActionHandler(for controller: KeyboardInputViewController) {
@@ -105,6 +113,12 @@ public extension Keyboard.KeyboardServices {
         spaceDragGestureHandler.action = { [weak self] in
             let offset = self?.state.keyboardContext.spaceDragOffset(for: $0)
             weakController?.adjustTextPosition(by: offset ?? $0)
+        }
+    }
+    
+    func setupHiddenCharGesture(for controller: KeyboardInputViewController) {
+        hiddenCharDragGestureHandler.action = { [weak self] isHiddenSelected in
+            self?.state.hiddenCharContext.isHiddenCharSelected = isHiddenSelected
         }
     }
 }

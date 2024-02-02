@@ -39,6 +39,7 @@ public extension KeyboardAction.Row {
         guard let action = action else { return .none }
         switch action {
         case .character(let char): return .characterMargin(char)
+        case let .characterWithHidden(char, hiddenChar): return .characterMargin(char)
         default: return .none
         }
     }

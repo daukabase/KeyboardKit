@@ -82,6 +82,10 @@ public extension KeyboardAction {
     var standardReleaseAction: GestureAction? {
         switch self {
         case .character(let char): return { $0?.insertText(char) }
+        case let .characterWithHidden(char, hiddenChar): return {
+            // check for release location
+            $0?.insertText(char)
+        }
         case .characterMargin(let char): return { $0?.insertText(char) }
         case .dictation: return { $0?.performDictation() }
         case .dismissKeyboard: return { $0?.dismissKeyboard() }

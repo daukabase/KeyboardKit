@@ -33,6 +33,10 @@ public extension Keyboard {
             actionContext: .disabled,
             inputContext: .disabled)
         
+        
+        /// The callout context to use.
+        public lazy var hiddenCharContext = CalloutContext.HiddenCharContext()
+        
         /// The dictation configuration to use.
         public lazy var dictationConfig = Dictation.KeyboardConfiguration(
             context: dictationContext)

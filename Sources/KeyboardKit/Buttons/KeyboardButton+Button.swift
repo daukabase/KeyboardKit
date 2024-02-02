@@ -43,6 +43,7 @@ public extension KeyboardButton {
             styleProvider: KeyboardStyleProvider,
             keyboardContext: KeyboardContext,
             calloutContext: CalloutContext?,
+            hiddenCharContext: CalloutContext.HiddenCharContext?,
             edgeInsets: EdgeInsets = .init(),
             isPressed: Binding<Bool>? = nil,
             @ViewBuilder contentConfig: @escaping ContentConfig
@@ -51,6 +52,7 @@ public extension KeyboardButton {
             self.actionHandler = actionHandler
             self.styleProvider = styleProvider
             self.keyboardContext = keyboardContext
+            self.hiddenCharContext = hiddenCharContext
             self.calloutContext = calloutContext
             self.edgeInsets = edgeInsets
             self.isPressed = isPressed
@@ -75,6 +77,7 @@ public extension KeyboardButton {
             styleProvider: KeyboardStyleProvider,
             keyboardContext: KeyboardContext,
             calloutContext: CalloutContext?,
+            hiddenCharContext: CalloutContext.HiddenCharContext?,
             edgeInsets: EdgeInsets = .init(),
             isPressed: Binding<Bool>? = nil
         ) where Content == KeyboardButton.Content {
@@ -83,7 +86,8 @@ public extension KeyboardButton {
                 actionHandler: actionHandler,
                 styleProvider: styleProvider,
                 keyboardContext: keyboardContext,
-                calloutContext: calloutContext,
+                calloutContext: calloutContext, 
+                hiddenCharContext: hiddenCharContext,
                 edgeInsets: edgeInsets,
                 isPressed: isPressed,
                 contentConfig: { $0 }
@@ -95,6 +99,7 @@ public extension KeyboardButton {
         private let styleProvider: KeyboardStyleProvider
         private let keyboardContext: KeyboardContext
         private let calloutContext: CalloutContext?
+        private let hiddenCharContext: CalloutContext.HiddenCharContext?
         private let edgeInsets: EdgeInsets
         private var isPressed: Binding<Bool>?
         private let contentConfig: ContentConfig
@@ -112,6 +117,7 @@ public extension KeyboardButton {
                     actionHandler: actionHandler,
                     keyboardContext: keyboardContext,
                     calloutContext: calloutContext,
+                    hiddenCharContext: hiddenCharContext,
                     edgeInsets: edgeInsets,
                     isPressed: isPressed ?? $isPressedInternal
                 )
@@ -152,7 +158,8 @@ struct KeyboardButton_Button_Previews: PreviewProvider {
                 actionHandler: .preview,
                 styleProvider: .preview,
                 keyboardContext: .preview,
-                calloutContext: .preview
+                calloutContext: .preview,
+                hiddenCharContext: nil
             ) {
                 $0.frame(width: 80, height: 80)
             }
@@ -172,6 +179,7 @@ struct KeyboardButton_Button_Previews: PreviewProvider {
                     styleProvider: .preview,
                     keyboardContext: .preview,
                     calloutContext: .preview,
+                    hiddenCharContext: nil,
                     edgeInsets: .init(top: 10, leading: 20, bottom: 30, trailing: 0),
                     isPressed: $isPressed
                 )

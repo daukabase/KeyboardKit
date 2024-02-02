@@ -11,7 +11,6 @@ import Foundation
 import SwiftUI
 
 public extension CalloutContext {
-    
     /**
      This type can be used as input callout state.
      */
@@ -68,6 +67,13 @@ public extension CalloutContext.InputContext {
         action?.inputCalloutText
     }
 
+    var alternativeInput: String? {
+        switch action {
+        case let .characterWithHidden(_, hiddenChar): return hiddenChar
+        default: return nil
+        }
+    }
+
     /// Whether or not the context has input and is enabled.
     var isActive: Bool {
         hasInput && isEnabled
@@ -106,4 +112,71 @@ public extension CalloutContext.InputContext {
     static var disabled: CalloutContext.InputContext {
         .init(isEnabled: false)
     }
+}
+
+extension CalloutContext {
+    public class HiddenCharContext: ObservableObject {
+        
+        @GestureState var longPress = false
+        @Published var isHiddenCharSelected = false
+
+        /// The coordinate space to use for callout.
+        public let coordinateSpace = "com.keyboardkit.coordinate.HiddenCharAction"
+        
+        /// The last time an action became active.
+        public var lastActionDate = Date()
+        
+        /// The minimum callout duration.
+        public var minimumVisibleDuration: TimeInterval = 0.05
+
+        /// The currently active action, if any.
+        @Published
+        public private(set) var action: KeyboardAction?
+        
+        /// The frame of the currently active button.
+        @Published
+        public private(set) var buttonFrame: CGRect = .zero
+
+        /// Get an optional input of the currently active action.
+        var input: String? {
+            action?.inputCalloutText
+        }
+        
+        var alternativeInput: String? {
+            switch action {
+            case let .characterWithHidden(_, hiddenChar): return hiddenChar
+            default: return nil
+            }
+        }
+
+        /// Whether or not the context has input and is enabled.
+        var isActive: Bool {
+            input != nil && longPress && alternativeInput != nil
+        }
+        
+        /// Reset the context. This will dismiss the callout.
+        func reset() {
+            action = nil
+            buttonFrame = .zero
+        }
+
+        /// Reset the context with a slight delay.
+        func resetWithDelay() {
+            let delay = minimumVisibleDuration
+            let date = Date()
+            lastActionDate = date
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                if self.lastActionDate > date { return }
+                self.reset()
+            }
+        }
+        
+        /// Update the current input for a certain action.
+        func updateInput(for action: KeyboardAction?, in geo: GeometryProxy) {
+            self.lastActionDate = Date()
+            self.action = action
+            self.buttonFrame = geo.frame(in: .named(coordinateSpace))
+        }
+    }
+
 }

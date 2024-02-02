@@ -38,6 +38,7 @@ extension Gestures {
             view: Content,
             action: KeyboardAction?,
             calloutContext: CalloutContext?,
+            hiddenCharContext: CalloutContext.HiddenCharContext?,
             isPressed: Binding<Bool>,
             isInScrollView: Bool,
             releaseOutsideTolerance: Double,
@@ -51,6 +52,7 @@ extension Gestures {
             self.view = view
             self.action = action
             self.calloutContext = calloutContext
+            self.hiddenCharContext = hiddenCharContext
             self.isPressed = isPressed
             self.isInScrollView = isInScrollView
             self.releaseOutsideTolerance = releaseOutsideTolerance
@@ -65,6 +67,7 @@ extension Gestures {
         private let view: Content
         private let action: KeyboardAction?
         private let calloutContext: CalloutContext?
+        private let hiddenCharContext: CalloutContext.HiddenCharContext?
         private let isPressed: Binding<Bool>
         private let isInScrollView: Bool
         private let releaseOutsideTolerance: Double
@@ -166,12 +169,14 @@ private extension Gestures.KeyboardButtonGestures {
         endActionCallout()
         calloutContext?.inputContext.resetWithDelay()
         calloutContext?.actionContext.reset()
+        hiddenCharContext?.resetWithDelay()
         resetGestureState()
     }
 
     func handleLongPress(in geo: GeometryProxy) {
         tryBeginActionCallout(in: geo)
         longPressAction?()
+        hiddenCharContext?.updateInput(for: action, in: geo)
     }
 
     func handlePress(in geo: GeometryProxy) {

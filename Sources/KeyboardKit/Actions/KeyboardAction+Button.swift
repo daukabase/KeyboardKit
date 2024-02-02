@@ -41,6 +41,7 @@ public extension KeyboardAction {
     func standardButtonText(for context: KeyboardContext) -> String? {
         switch self {
         case .character(let char): return standardButtonText(for: char)
+        case let .characterWithHidden(char, _): return standardButtonText(for: char)
         case .emoji(let emoji): return emoji.char
         case .keyboardType(let type): return type.standardButtonText(for: context)
         case .nextLocale: return context.locale.languageCode?.uppercased()

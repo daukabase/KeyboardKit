@@ -42,7 +42,8 @@ open class StandardKeyboardActionHandler: NSObject, KeyboardActionHandler {
             keyboardBehavior: controller.services.keyboardBehavior,
             autocompleteContext: controller.state.autocompleteContext,
             feedbackConfiguration: controller.state.feedbackConfiguration,
-            spaceDragGestureHandler: controller.services.spaceDragGestureHandler
+            spaceDragGestureHandler: controller.services.spaceDragGestureHandler,
+            hiddenCharDragGestureHandler: controller.services.hiddenCharDragGestureHandler
         )
     }
     #endif
@@ -64,7 +65,8 @@ open class StandardKeyboardActionHandler: NSObject, KeyboardActionHandler {
         keyboardBehavior: KeyboardBehavior,
         autocompleteContext: AutocompleteContext,
         feedbackConfiguration: FeedbackConfiguration,
-        spaceDragGestureHandler: Gestures.SpaceDragGestureHandler
+        spaceDragGestureHandler: Gestures.SpaceDragGestureHandler,
+        hiddenCharDragGestureHandler: Gestures.HiddenCharDragGestureHandler
     ) {
         weak var weakController = controller
         self.keyboardController = weakController
@@ -73,6 +75,7 @@ open class StandardKeyboardActionHandler: NSObject, KeyboardActionHandler {
         self.autocompleteContext = autocompleteContext
         self.feedbackConfiguration = feedbackConfiguration
         self.spaceDragGestureHandler = spaceDragGestureHandler
+        self.hiddenCharDragGestureHandler = hiddenCharDragGestureHandler
     }
 
 
@@ -96,6 +99,8 @@ open class StandardKeyboardActionHandler: NSObject, KeyboardActionHandler {
     
     /// The space drag gesture handler to use.
     public var spaceDragGestureHandler: Gestures.SpaceDragGestureHandler
+
+    public var hiddenCharDragGestureHandler: Gestures.HiddenCharDragGestureHandler
     
 
     /// The action to use to register emojis, if any.
@@ -103,6 +108,7 @@ open class StandardKeyboardActionHandler: NSObject, KeyboardActionHandler {
     
     
     private var spaceDragActivationLocation: CGPoint?
+    private var hiddenCharActivationLocation: CGPoint?
     
 
 
@@ -149,6 +155,7 @@ open class StandardKeyboardActionHandler: NSObject, KeyboardActionHandler {
         let gestureAction = self.action(for: gesture, on: action)
         triggerFeedback(for: gesture, on: action)
         tryUpdateSpaceDragState(for: gesture, on: action)
+        tryUpdateHiddenCharDragState(for: gesture, on: action)
         guard let gestureAction else { return }
         tryRemoveAutocompleteInsertedSpace(before: gesture, on: action)
         tryApplyAutocorrectSuggestion(before: gesture, on: action)
@@ -167,6 +174,11 @@ open class StandardKeyboardActionHandler: NSObject, KeyboardActionHandler {
         to currentLocation: CGPoint
     ) {
         tryHandleSpaceDrag(
+            on: action,
+            from: startLocation,
+            to: currentLocation
+        )
+        tryHandleHiddenCharDrag(
             on: action,
             from: startLocation,
             to: currentLocation
@@ -429,5 +441,40 @@ private extension StandardKeyboardActionHandler {
             isActive,
             animated: true
         )
+    }
+    
+    func tryHandleHiddenCharDrag(
+        on action: KeyboardAction,
+        from startLocation: CGPoint,
+        to currentLocation: CGPoint
+    ) {
+        guard case .characterWithHidden = action else { return }
+        guard keyboardContext.isHiddenCharDragSelectionGestureActive else { return }
+
+        let activationLocation = hiddenCharActivationLocation ?? currentLocation
+        hiddenCharActivationLocation = activationLocation
+        hiddenCharDragGestureHandler.handleDragGesture(
+            from: activationLocation,
+            to: currentLocation
+        )
+    }
+
+    func tryUpdateHiddenCharDragState(
+        for gesture: Gesture,
+        on action: KeyboardAction
+    ) {
+        guard case .characterWithHidden = action else { return }
+        switch gesture {
+        case .press:
+//            keyboardContext.setIsHiddenCharDragSelectionGestureActive(true, animated: true)
+//            setSpaceDragActive(false)
+//            spaceDragActivationLocation = nil
+            break
+        case .longPress:
+            keyboardContext.setIsHiddenCharDragSelectionGestureActive(true, animated: true)
+        case .release:
+            keyboardContext.setIsHiddenCharDragSelectionGestureActive(false, animated: true)
+        default: break
+        }
     }
 }

@@ -17,6 +17,8 @@ public extension KeyboardAction {
     var inputCalloutText: String? {
         switch self {
         case .character(let char): return char
+        // here should be display logic of second char
+        case let .characterWithHidden(char, _): return char
         case .emoji(let emoji): return emoji.char
         default: return nil
         }

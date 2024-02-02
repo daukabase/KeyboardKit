@@ -84,6 +84,21 @@ public class KeyboardContext: ObservableObject {
             isSpaceDragGestureActive = value
         }
     }
+    
+    /// Whether or not a space drag gesture is active.
+    @Published
+    public var isHiddenCharDragSelectionGestureActive = false
+    
+    func setIsHiddenCharDragSelectionGestureActive(
+        _ value: Bool,
+        animated: Bool
+    ) {
+        if animated {
+            withAnimation { isHiddenCharDragSelectionGestureActive = value }
+        } else {
+            isHiddenCharDragSelectionGestureActive = value
+        }
+    }
 
     /// An optional dictation replacement action.
     @Published

@@ -73,6 +73,69 @@ public extension Gestures {
             action(-offsetDelta)
         }
     }
+    
+    class HiddenCharDragGestureHandler: DragGestureHandler {
+        
+        /**
+         Create a gesture handler instance.
+         
+         - Parameters:
+           - sensitivity: The drag sensitivity, by default `.medium`.
+           - verticalThreshold: The vertical threshold in points, by default `50`.
+           - action: The action to perform when the offset changes.
+         */
+        public init(
+            sensitivity: Gestures.SpaceDragSensitivity = .medium,
+            verticalThreshold: Double = 50,
+            action: @escaping (Bool) -> Void
+        ) {
+            self.sensitivity = sensitivity
+            self.verticalThreshold = verticalThreshold
+            self.action = action
+        }
+        
+        
+        /// The drag sensitivity.
+        public var sensitivity: Gestures.SpaceDragSensitivity
+        
+        /// The vertical threshold in points.
+        public var verticalThreshold: Double
+        
+        /// The action to perform when the offset changes.
+        public var action: (Bool) -> Void
+        
+        
+        /// The location where the current drag stated.
+        public var currentDragStartLocation: CGPoint?
+        
+        /// The currently applied drag text position offset.
+        public var currentDragTextPositionOffset: Int = 0
+        
+        /**
+         Handle a drag gesture on space, which by default should
+         move the cursor left and right after a long press.
+         */
+        public func handleDragGesture(
+            from startLocation: CGPoint,
+            to currentLocation: CGPoint
+        ) {
+            tryStartNewDragGesture(from: startLocation, to: currentLocation)
+            
+            let isHiddenCharSelected = currentLocation.x < startLocation.x
+
+            action(isHiddenCharSelected)
+        }
+
+        func tryStartNewDragGesture(
+            from startLocation: CGPoint,
+            to currentLocation: CGPoint
+        ) {
+            let isNewDrag = currentDragStartLocation != startLocation
+            currentDragStartLocation = startLocation
+            guard isNewDrag else { return }
+            currentDragTextPositionOffset = 0
+        }
+    }
 }
 
 #if os(iOS) || os(tvOS)

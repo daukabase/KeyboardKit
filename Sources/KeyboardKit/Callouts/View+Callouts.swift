@@ -19,6 +19,42 @@ public extension View {
        - actionCalloutStyle: The action callout style to apply, by default ``KeyboardStyle/ActionCallout/standard``.
        - inputCalloutStyle: The action callout style to apply, by default ``KeyboardStyle/ActionCallout/standard``.
      */
+    func keyboardHiddenCharContainer(
+        hiddenCharContext: CalloutContext.HiddenCharContext,
+        keyboardContext: KeyboardContext,
+        actionCalloutStyle: KeyboardStyle.ActionCallout = .standard,
+        inputCalloutStyle: KeyboardStyle.InputCallout = .standard
+    ) -> some View {
+        self
+            .gesture(
+                LongPressGesture(minimumDuration: 1)
+                .updating(hiddenCharContext.$longPress) { currentState, gestureState, transaction in
+                    print(currentState)
+                    print(gestureState)
+                    print(transaction)
+                }
+                .onEnded { value in
+                    print("ENDED: \(value)")
+                }
+            )
+            .overlay(
+                Callouts.HiddenCharCallout(
+                    calloutContext: hiddenCharContext,
+                    keyboardContext: keyboardContext,
+                    style: .standard
+                )
+            ).coordinateSpace(name: hiddenCharContext.coordinateSpace)
+    }
+
+    /**
+     Apply a keyboard action and input callout to the view.
+
+     - Parameters:
+       - calloutContext: The callout context to use.
+       - keyboardContext: The keyboard context to use.
+       - actionCalloutStyle: The action callout style to apply, by default ``KeyboardStyle/ActionCallout/standard``.
+       - inputCalloutStyle: The action callout style to apply, by default ``KeyboardStyle/ActionCallout/standard``.
+     */
     func keyboardCalloutContainer(
         calloutContext: CalloutContext,
         keyboardContext: KeyboardContext,
