@@ -13,6 +13,13 @@ import KeyboardKit
  adds a rocket and a locale key around the space key.
  */
 class DemoLayoutProvider: StandardKeyboardLayoutProvider {
+    override init(
+        baseProvider: KeyboardLayoutProvider = RussianKeyboardLayoutProvider(),
+        localizedProviders: [StandardKeyboardLayoutProvider.LocalizedProvider] = []
+    ) {
+        super.init(baseProvider: baseProvider, localizedProviders: localizedProviders)
+    }
+
     override func keyboardLayout(for context: KeyboardContext) -> KeyboardLayout {
         let layout = super.keyboardLayout(for: context)
         layout.tryInsertEmojiButton()

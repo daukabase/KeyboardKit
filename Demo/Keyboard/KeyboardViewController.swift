@@ -60,14 +60,6 @@ class KeyboardViewController: KeyboardInputViewController {
         /// The demo provider adds a "next locale" button if
         /// needed, as well as a rocket emoji button.
         services.layoutProvider = DemoLayoutProvider()
-        
-        /// 💡 Setup a demo-specific style provider.
-        ///
-        /// The demo provider styles the rocket emoji button
-        /// and has some commented out code that you can try.
-//        services.styleProvider = DemoStyleProvider(
-//            keyboardContext: state.keyboardContext)
-        
 
         /// 💡 Setup a custom keyboard locale.
         ///
@@ -79,15 +71,9 @@ class KeyboardViewController: KeyboardInputViewController {
         ///
         /// The demo layout provider will add a "next locale"
         /// button if you have more than one locale.
-        state.keyboardContext.localePresentationLocale = .current
-        state.keyboardContext.locales = [] // KeyboardLocale.all.locales
-        
-        /// 💡 Setup a custom dictation key replacement.
-        ///
-        /// Since dictation is not available by default, the
-        /// dictation button is removed if we don't set this.
-//        state.keyboardContext.keyboardDictationReplacement = .character("$")
-        
+        state.keyboardContext.localePresentationLocale = KeyboardLocale.russian.locale
+        state.keyboardContext.locales = [KeyboardLocale.russian.locale]
+
         /// 💡 Configure the space long press behavior.
         ///
         /// The locale context menu will only open up if the
@@ -102,28 +88,5 @@ class KeyboardViewController: KeyboardInputViewController {
         
         /// 💡 Call super to perform the base initialization.
         super.viewDidLoad()
-    }
-
-    /**
-     This function is called whenever the keyboard should be
-     created or updated.
-     */
-    override func viewWillSetupKeyboard() {
-        super.viewWillSetupKeyboard()
-
-        /// 💡 Make the demo use a standard ``SystemKeyboard``.
-        ///
-        /// This is not needed if you want to use a standard
-        /// view, but this is how you can setup a custom one.
-        setup { controller in
-            SystemKeyboard(
-                state: controller.state,
-                services: controller.services,
-                buttonContent: { $0.view },
-                buttonView: { $0.view },
-                emojiKeyboard: { $0.view },
-                toolbar: { $0.view }
-            )
-        }
     }
 }

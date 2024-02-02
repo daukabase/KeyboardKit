@@ -32,7 +32,7 @@ open class StandardKeyboardLayoutProvider: KeyboardLayoutProvider {
        - localizedProviders: A list of localized layout providers, by default `empty`.
      */
     public init(
-        baseProvider: KeyboardLayoutProvider = RussianKeyboardLayoutProvider(),
+        baseProvider: KeyboardLayoutProvider = InputSetBasedKeyboardLayoutProvider(),
         localizedProviders: [LocalizedProvider] = []
     ) {
         self.baseProvider = baseProvider
