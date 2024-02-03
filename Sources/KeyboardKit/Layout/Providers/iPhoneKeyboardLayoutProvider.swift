@@ -100,7 +100,7 @@ open class iPhoneKeyboardLayoutProvider: BaseKeyboardLayoutProvider {
         guard isExpectedActionSet(actions) else { return [] }
         let margin = actions[2].leadingCharacterMarginAction
         guard let switcher = keyboardSwitchActionForBottomInputRow(for: context) else { return [] }
-        if context.isAlphabetic(.russian) {
+        if context.isAlphabetic(.russian) || context.isAlphabetic(.kazakh) {
             return [switcher]
         } else {
             return [switcher, margin]
@@ -114,7 +114,7 @@ open class iPhoneKeyboardLayoutProvider: BaseKeyboardLayoutProvider {
     ) -> KeyboardAction.Row {
         guard isExpectedActionSet(actions) else { return [] }
         let margin = actions[2].trailingCharacterMarginAction
-        if context.isAlphabetic(.russian) {
+        if context.isAlphabetic(.russian) || context.isAlphabetic(.kazakh) {
             return [.backspace]
         } else {
             return [margin, .backspace]
@@ -125,7 +125,7 @@ open class iPhoneKeyboardLayoutProvider: BaseKeyboardLayoutProvider {
     open func lowerSystemButtonWidth(
         for context: KeyboardContext
     ) -> KeyboardLayout.ItemWidth {
-        if context.isAlphabetic(.russian) { return .input }
+        if context.isAlphabetic(.russian) || context.isAlphabetic(.kazakh) { return .input }
         return .percentage(0.13)
     }
 
