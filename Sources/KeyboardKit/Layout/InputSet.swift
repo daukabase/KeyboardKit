@@ -46,29 +46,52 @@ public extension InputSet {
         .init(rows: [
             .init(chars: "йцукенгшщзх"),
             .init(chars: "фывапролджэ"),
-            qazaqThirdRow
+            russianThirdRow
         ])
     }
 
     static var neoQazaq: InputSet {
         .init(rows: [
             qazaqFirstRow,
-            .init(chars: "фывапролджэ"),
+            qazaqSecondRow,
             qazaqThirdRow
         ])
     }
 
     static var qazaqFirstRow: InputSet.Row {
-        let firstPart: [InputSet.Item] = InputSet.Row(chars: "йцуке")
-        let middlePart1 = [InputSet.Item("н", hidden: InputSet.Item("ң"))]
-        let middlePart2 = [InputSet.Item("г", hidden: InputSet.Item("ғ"))]
-        let thirdPart: [InputSet.Item] = InputSet.Row(chars: "шщзх")
+        let iTs: [InputSet.Item] = InputSet.Row(chars: "йц")
 
-        let row = firstPart + middlePart1 + middlePart2 + thirdPart
-        return row
+        let u: [InputSet.Item] = [InputSet.Item("у", hidden: InputSet.Item("ұ"))]
+        let k = [InputSet.Item("к", hidden: InputSet.Item("қ"))]
+        let e = InputSet.Row(chars: "е")
+        let n = [InputSet.Item("н", hidden: InputSet.Item("ң"))]
+        let g = [InputSet.Item("г", hidden: InputSet.Item("ғ"))]
+        let shShhZ: [InputSet.Item] = InputSet.Row(chars: "шщз")
+        let x = [InputSet.Item("х", hidden: InputSet.Item("һ"))]
+
+        return iTs + u + k + e + n + g + shShhZ + x
+    }
+
+    static var qazaqSecondRow: InputSet.Row {
+        let fiv: [InputSet.Item] = InputSet.Row(chars: "фыв")
+        let a: [InputSet.Item] = [InputSet.Item("а", hidden: InputSet.Item("ә"))]
+        let pr = InputSet.Row(chars: "пр")
+        let o: [InputSet.Item] = [InputSet.Item("о", hidden: InputSet.Item("ө"))]
+        let ldzhz: [InputSet.Item] = InputSet.Row(chars: "лджэ")
+
+        return fiv + a + pr + o + ldzhz
     }
 
     static var qazaqThirdRow: InputSet.Row {
+        let yaChSM: [InputSet.Item] = InputSet.Row(chars: "ячсм")
+        let i = [InputSet.Item("и", hidden: InputSet.Item("і"))]
+        let t: [InputSet.Item] = InputSet.Row(chars: "т")
+        let easyMarkHehe = [InputSet.Item("ь", hidden: InputSet.Item("ъ"))]
+        let byu: [InputSet.Item] = InputSet.Row(chars: "бю")
+        return yaChSM + i + t + easyMarkHehe + byu
+    }
+
+    static var russianThirdRow: InputSet.Row {
         let firstPart: [InputSet.Item] = InputSet.Row(chars: "ячсмит")
         let secondPart = [InputSet.Item("ь", hidden: InputSet.Item("ъ"))]
         let thirdPart: [InputSet.Item] = InputSet.Row(chars: "бю")
