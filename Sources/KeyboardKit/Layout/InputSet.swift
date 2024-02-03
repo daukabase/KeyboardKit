@@ -46,11 +46,29 @@ public extension InputSet {
         .init(rows: [
             .init(chars: "йцукенгшщзх"),
             .init(chars: "фывапролджэ"),
-            russianThirdRow
+            qazaqThirdRow
         ])
     }
 
-    static var russianThirdRow: InputSet.Row {
+    static var neoQazaq: InputSet {
+        .init(rows: [
+            qazaqFirstRow,
+            .init(chars: "фывапролджэ"),
+            qazaqThirdRow
+        ])
+    }
+
+    static var qazaqFirstRow: InputSet.Row {
+        let firstPart: [InputSet.Item] = InputSet.Row(chars: "йцуке")
+        let middlePart1 = [InputSet.Item("н", hidden: InputSet.Item("ң"))]
+        let middlePart2 = [InputSet.Item("г", hidden: InputSet.Item("ғ"))]
+        let thirdPart: [InputSet.Item] = InputSet.Row(chars: "шщзх")
+
+        let row = firstPart + middlePart1 + middlePart2 + thirdPart
+        return row
+    }
+
+    static var qazaqThirdRow: InputSet.Row {
         let firstPart: [InputSet.Item] = InputSet.Row(chars: "ячсмит")
         let secondPart = [InputSet.Item("ь", hidden: InputSet.Item("ъ"))]
         let thirdPart: [InputSet.Item] = InputSet.Row(chars: "бю")
