@@ -31,7 +31,7 @@ public enum KeyboardAction: Codable, Equatable {
     /// Inserts a text character when released.
     case character(String)
     
-    case characterWithHidden(String, hiddenCharacter: String)
+    case characterWithHidden(String, hiddenCharacters: [String])
     
     /// Inserts a text character when released, but is rendered as empty space.
     case characterMargin(String)
@@ -253,7 +253,7 @@ public extension KeyboardAction {
         switch self {
         case .backspace: return "Backspace"
         case .character(let char): return char
-        case let .characterWithHidden(char, hiddenChar): return char + "|" + hiddenChar
+        case let .characterWithHidden(char, hiddenChar): return char + "|" + hiddenChar.joined(separator: "|")
         case .characterMargin: return nil
         case .command: return "Command"
         case .control: return "Control"

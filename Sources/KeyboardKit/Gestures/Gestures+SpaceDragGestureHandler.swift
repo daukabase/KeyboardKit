@@ -87,7 +87,7 @@ public extension Gestures {
         public init(
             sensitivity: Gestures.SpaceDragSensitivity = .medium,
             verticalThreshold: Double = 50,
-            action: @escaping (Bool) -> Void
+            action: @escaping (Int) -> Void
         ) {
             self.sensitivity = sensitivity
             self.verticalThreshold = verticalThreshold
@@ -102,7 +102,7 @@ public extension Gestures {
         public var verticalThreshold: Double
         
         /// The action to perform when the offset changes.
-        public var action: (Bool) -> Void
+        public var action: (Int) -> Void
         
         
         /// The location where the current drag stated.
@@ -111,8 +111,8 @@ public extension Gestures {
         /// The currently applied drag text position offset.
         public var currentDragTextPositionOffset: Int = 0
         
-        public private(set) var isHiddenCharSelected = false
-        
+        public private(set) var selectedCharIndex = 0
+
         /**
          Handle a drag gesture on space, which by default should
          move the cursor left and right after a long press.
@@ -123,10 +123,17 @@ public extension Gestures {
         ) {
             tryStartNewDragGesture(from: startLocation, to: currentLocation)
             
-            let isHiddenCharSelected = currentLocation.x < startLocation.x - 4
+            let widthOfCalloutChar: CGFloat = 8
+            
+            let initialCharBound = startLocation.x - widthOfCalloutChar / 2 ..< startLocation.x + widthOfCalloutChar / 2
+            
+            if initialCharBound.contains(currentLocation.x) {
+                selectedCharIndex = 0
+            } else {
+                selectedCharIndex = 1
+            }
 
-            self.isHiddenCharSelected = isHiddenCharSelected
-            action(isHiddenCharSelected)
+            action(selectedCharIndex)
         }
 
         func tryStartNewDragGesture(
@@ -137,6 +144,10 @@ public extension Gestures {
             currentDragStartLocation = startLocation
             guard isNewDrag else { return }
             currentDragTextPositionOffset = 0
+        }
+
+        func reset() {
+            selectedCharIndex = 0
         }
     }
 }

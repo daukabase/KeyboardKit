@@ -266,13 +266,20 @@ open class StandardKeyboardActionHandler: NSObject, KeyboardActionHandler {
         for gesture: Gesture,
         on action: KeyboardAction
     ) -> KeyboardAction.GestureAction? {
-        guard gesture == .release, case let .characterWithHidden(char, hiddenChar) = action else { return nil }
+        guard gesture == .release, case let .characterWithHidden(char, hiddenChars) = action else { return nil }
         return { [hiddenCharDragGestureHandler] controller in
-            if hiddenCharDragGestureHandler.isHiddenCharSelected {
-                controller?.insertText(hiddenChar)
-            } else {
+            if hiddenCharDragGestureHandler.selectedCharIndex == 0 {
                 controller?.insertText(char)
+            } else {
+                let indexInHiddenChars = hiddenCharDragGestureHandler.selectedCharIndex - 1
+                if hiddenChars.indices.contains(indexInHiddenChars) {
+                    controller?.insertText(hiddenChars[indexInHiddenChars])
+                } else {
+                    controller?.insertText(char)
+                }
             }
+            // reset
+            hiddenCharDragGestureHandler.reset()
         }
     }
 

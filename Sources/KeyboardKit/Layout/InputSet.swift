@@ -61,7 +61,7 @@ public extension InputSet {
     static var qazaqFirstRow: InputSet.Row {
         let iTs: [InputSet.Item] = InputSet.Row(chars: "йц")
 
-        let u: [InputSet.Item] = [InputSet.Item("у", hidden: InputSet.Item("ұ"))]
+        let u: [InputSet.Item] = [InputSet.Item("у", hiddenChars: [InputSet.Item("ұ"), InputSet.Item("ү")])]
         let k = [InputSet.Item("к", hidden: InputSet.Item("қ"))]
         let e = InputSet.Row(chars: "е")
         let n = [InputSet.Item("н", hidden: InputSet.Item("ң"))]
@@ -69,7 +69,17 @@ public extension InputSet {
         let shShhZ: [InputSet.Item] = InputSet.Row(chars: "шщз")
         let x = [InputSet.Item("х", hidden: InputSet.Item("һ"))]
 
-        return iTs + u + k + e + n + g + shShhZ + x
+        // compile type-check error
+        var row = [InputSet.Item]()
+        row.append(contentsOf: iTs)
+        row.append(contentsOf: u)
+        row.append(contentsOf: k)
+        row.append(contentsOf: e)
+        row.append(contentsOf: n)
+        row.append(contentsOf: g)
+        row.append(contentsOf: shShhZ)
+        row.append(contentsOf: x)
+        return row
     }
 
     static var qazaqSecondRow: InputSet.Row {

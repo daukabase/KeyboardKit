@@ -117,8 +117,8 @@ public extension Keyboard.KeyboardServices {
     }
     
     func setupHiddenCharGesture(for controller: KeyboardInputViewController) {
-        hiddenCharDragGestureHandler.action = { [weak self] isHiddenSelected in
-            self?.state.hiddenCharContext.isHiddenCharSelected = isHiddenSelected
+        hiddenCharDragGestureHandler.action = { [weak self] selectedCharIndex in
+            self?.state.hiddenCharContext.selectedCharIndex = selectedCharIndex
         }
     }
 }

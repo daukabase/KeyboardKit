@@ -27,13 +27,20 @@ public extension InputSet {
          - Parameters:
            - char: The char to use for all casings.
          */
-        public init(_ char: String, hidden: Item? = nil) {
+        public init(_ char: String, hiddenChars: [Item]? = nil) {
             self.neutral = char
             self.uppercased = char.uppercased()
             self.lowercased = char.lowercased()
-            self._hidden = hidden.map(Box.init)
+            self._hidden = hiddenChars.map { Box($0) }
         }
         
+        public init(_ char: String, hidden: Item) {
+            self.neutral = char
+            self.uppercased = char.uppercased()
+            self.lowercased = char.lowercased()
+            self._hidden = Box([hidden])
+        }
+
         /**
          Create an input set item with individual characters.
          
@@ -46,12 +53,12 @@ public extension InputSet {
             neutral: String,
             uppercased: String,
             lowercased: String,
-            hidden: Item? = nil
+            hiddenChars: [Item]? = nil
         ) {
             self.neutral = neutral
             self.uppercased = uppercased
             self.lowercased = lowercased
-            self._hidden = hidden.map(Box.init)
+            self._hidden = hiddenChars.map { Box($0) }
         }
         
         /// The neutral char value.
@@ -63,10 +70,10 @@ public extension InputSet {
         /// The lowercased char value.
         public var lowercased: String
 
-        public var hiddenCharacter: Item? {
+        public var hiddenCharacters: [Item]? {
             return _hidden?.boxed
         }
-        private var _hidden: Box<Item>?
+        private var _hidden: Box<[Item]>?
 
         /// Resolve the character to use for a certain case.
         public func character(for case: Keyboard.Case) -> String {

@@ -14,7 +14,7 @@ import KeyboardKit
  */
 class DemoLayoutProvider: StandardKeyboardLayoutProvider {
     override init(
-        baseProvider: KeyboardLayoutProvider = RussianKeyboardLayoutProvider(),
+        baseProvider: KeyboardLayoutProvider = NeoQazaqKeyboardLayoutProvider(),
         localizedProviders: [StandardKeyboardLayoutProvider.LocalizedProvider] = []
     ) {
         super.init(baseProvider: baseProvider, localizedProviders: localizedProviders)

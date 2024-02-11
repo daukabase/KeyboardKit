@@ -72,11 +72,11 @@ open class BaseKeyboardLayoutProvider: KeyboardLayoutProvider {
 
         let actionCharacters = rows.map { row in
             row.map {
-                if let hidden = $0.hiddenCharacter {
-                    let hiddenChar = hidden.character(for: casing)
+                if let hiddenCharacters = $0.hiddenCharacters {
+                    let hiddenChars = hiddenCharacters.map { $0.character(for: casing)}
                     return KeyboardAction.characterWithHidden(
                         $0.character(for: casing),
-                        hiddenCharacter: hiddenChar
+                        hiddenCharacters: hiddenChars
                     )
                 } else {
                     return KeyboardAction.character($0.character(for: casing))
