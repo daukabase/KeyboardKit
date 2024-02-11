@@ -25,20 +25,29 @@ public extension Callouts {
          */
         public init(
             frame: CGRect,
-            style: Style = .standard
+            style: Style = .standard,
+            isLeftCurveEnabled: Bool = true
         ) {
             self.frame = frame
             self.style = style
+            self.isLeftCurveEnabled = isLeftCurveEnabled
         }
         
         public typealias Style = KeyboardStyle.Callout
         
         private let frame: CGRect
         private let style: Style
-        
+        private let isLeftCurveEnabled: Bool
+
         public var body: some View {
             HStack(alignment: .top, spacing: 0) {
-                calloutCurve.rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+                if isLeftCurveEnabled {
+                    calloutCurve.rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+                } else {
+                    Rectangle()
+                        .frame(width: curveSize.width, height: curveSize.height)
+                        .foregroundColor(.clear)
+                }
                 buttonBody
                 calloutCurve
             }

@@ -169,7 +169,7 @@ private extension Gestures.KeyboardButtonGestures {
         endActionCallout()
         calloutContext?.inputContext.resetWithDelay()
         calloutContext?.actionContext.reset()
-        hiddenCharContext?.resetWithDelay()
+        hiddenCharContext?.reset()
         resetGestureState()
     }
 
@@ -216,6 +216,9 @@ private extension Gestures.KeyboardButtonGestures {
     }
 
     func shouldApplyReleaseOutsize(for geo: GeometryProxy) -> Bool {
+        if hiddenCharContext?.isActive == true {
+            return true
+        }
         guard let dragValue = lastDragValue else { return false }
         let rect = CGRect.releaseOutsideToleranceArea(for: geo, tolerance: releaseOutsideTolerance)
         let isInsideRect = rect.contains(dragValue.location)

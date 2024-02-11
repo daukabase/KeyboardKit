@@ -54,7 +54,7 @@ private extension Callouts.HiddenCharCallout {
     var callout: some View {
         VStack(spacing: 0) {
             calloutView.offset(
-                x: 0,
+                x: callInputViewsOffset,
                 y: 1
             )
             calloutButton
@@ -64,35 +64,61 @@ private extension Callouts.HiddenCharCallout {
 
     @ViewBuilder
     var calloutView: some View {
-        HStack(spacing: 4) {
-            callInputView(value: calloutContext.input ?? "", isSelected: calloutContext.selectedCharIndex == 0)
+        HStack(spacing: spacingBetweenCalloutInputs) {
+            callInputView(value: calloutContext.input ?? "")
 
-            ForEach(0 ..< calloutContext.alternativeInputs.count, id: \.self) { index in
-                callInputView(
-                    value: calloutContext.alternativeInputs[index],
-                    isSelected: calloutContext.selectedCharIndex == index + 1
-                )
-            }
+            alternativeInputs
         }
         .frame(minWidth: calloutSize.width, minHeight: calloutSize.height)
-        .padding(.horizontal, 8)
+        .padding(.horizontal, horizontalPaddingCallout)
         .background(style.callout.backgroundColor)
-        .cornerRadius(cornerRadius)
+        .cornerRadius(cornerRadius, corners: [.topLeft, .topRight, .bottomRight])
+    }
+
+    @ViewBuilder
+    var alternativeInputs: some View {
+        ForEach(0 ..< calloutContext.alternativeInputs.count, id: \.self) { index in
+            callInputView(
+                value: calloutContext.alternativeInputs[index]
+            )
+        }
+    }
+
+    var callInputViewsOffset: CGFloat {
+        let buttonWidth = buttonFrame.width
+        return (callInputViewsWidth - buttonWidth) / 2
+    }
+
+    var callInputViewsWidth: CGFloat {
+        let calloutButtonWidth = calloutSelectionButtonSize.width
+        let items = CGFloat(calloutContext.alternativeInputs.count + 1)
+        let spacing = spacingBetweenCalloutInputs * (items - 1)
+        let padding = horizontalPaddingCallout * 2
+        return items * calloutButtonWidth + spacing + padding
     }
 
     func callInputView(value: String, isSelected: Bool) -> some View {
         Text(value)
             .font(style.font.font)
-            .frame(width: buttonSize.width * 0.8, height: buttonSize.height * 0.8)
+            .frame(width: calloutSelectionButtonSize.width, height: calloutSelectionButtonSize.height)
             .foregroundColor(isSelected ? Color.white : style.callout.textColor)
             .background(isSelected ? Color.blue : style.callout.backgroundColor)
             .cornerRadius(style.callout.buttonCornerRadius)
     }
 
+    func callInputView(value: String) -> some View {
+        GeometryReader { proxy in
+            callInputView(value: value, isSelected: calloutContext.isSelected(value: value, for: proxy))
+        }
+        .frame(width: buttonSize.width * 0.9, height: buttonSize.height * 0.9)
+        .cornerRadius(style.callout.buttonCornerRadius)
+    }
+
     var calloutButton: some View {
         Callouts.ButtonArea(
             frame: buttonFrame,
-            style: style.callout
+            style: style.callout,
+            isLeftCurveEnabled: false
         )
     }
 }
@@ -112,6 +138,18 @@ private extension Callouts.HiddenCharCallout {
         buttonFrame.size
     }
     
+    var calloutSelectionButtonSize: CGSize {
+        CGSize(width: buttonSize.width * 0.9, height: buttonSize.height * 0.9)
+    }
+
+    var horizontalPaddingCallout: CGFloat {
+        8
+    }
+
+    var spacingBetweenCalloutInputs: CGFloat {
+        4
+    }
+
     var calloutSize: CGSize {
         CGSize(
             width: calloutSizeWidth,
@@ -159,3 +197,18 @@ private extension Callouts.HiddenCharCallout {
     }
 }
 
+extension View {
+    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
+        clipShape( RoundedCorner(radius: radius, corners: corners) )
+    }
+}
+struct RoundedCorner: Shape {
+
+    var radius: CGFloat = .infinity
+    var corners: UIRectCorner = .allCorners
+
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        return Path(path.cgPath)
+    }
+}

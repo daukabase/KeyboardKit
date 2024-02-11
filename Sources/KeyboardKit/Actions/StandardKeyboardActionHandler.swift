@@ -266,17 +266,13 @@ open class StandardKeyboardActionHandler: NSObject, KeyboardActionHandler {
         for gesture: Gesture,
         on action: KeyboardAction
     ) -> KeyboardAction.GestureAction? {
-        guard gesture == .release, case let .characterWithHidden(char, hiddenChars) = action else { return nil }
+        
+        guard gesture == .release, case let .characterWithHidden(char, _) = action else { return nil }
         return { [hiddenCharDragGestureHandler] controller in
-            if hiddenCharDragGestureHandler.selectedCharIndex == 0 {
-                controller?.insertText(char)
+            if let selected = hiddenCharDragGestureHandler.selectedInputValue {
+                controller?.insertText(selected)
             } else {
-                let indexInHiddenChars = hiddenCharDragGestureHandler.selectedCharIndex - 1
-                if hiddenChars.indices.contains(indexInHiddenChars) {
-                    controller?.insertText(hiddenChars[indexInHiddenChars])
-                } else {
-                    controller?.insertText(char)
-                }
+                controller?.insertText(char)
             }
             // reset
             hiddenCharDragGestureHandler.reset()
@@ -487,11 +483,6 @@ private extension StandardKeyboardActionHandler {
     ) {
         guard case .characterWithHidden = action else { return }
         switch gesture {
-        case .press:
-//            keyboardContext.setIsHiddenCharDragSelectionGestureActive(true, animated: true)
-//            setSpaceDragActive(false)
-//            spaceDragActivationLocation = nil
-            break
         case .longPress:
             keyboardContext.setIsHiddenCharDragSelectionGestureActive(true, animated: true)
         case .release:

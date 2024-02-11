@@ -87,7 +87,7 @@ public extension Gestures {
         public init(
             sensitivity: Gestures.SpaceDragSensitivity = .medium,
             verticalThreshold: Double = 50,
-            action: @escaping (Int) -> Void
+            action: @escaping (HiddenCharContextDragParameters) -> Void
         ) {
             self.sensitivity = sensitivity
             self.verticalThreshold = verticalThreshold
@@ -102,7 +102,7 @@ public extension Gestures {
         public var verticalThreshold: Double
         
         /// The action to perform when the offset changes.
-        public var action: (Int) -> Void
+        public var action: (HiddenCharContextDragParameters) -> Void
         
         
         /// The location where the current drag stated.
@@ -111,7 +111,7 @@ public extension Gestures {
         /// The currently applied drag text position offset.
         public var currentDragTextPositionOffset: Int = 0
         
-        public private(set) var selectedCharIndex = 0
+        public private(set) var selectedInputValue: String?
 
         /**
          Handle a drag gesture on space, which by default should
@@ -122,18 +122,14 @@ public extension Gestures {
             to currentLocation: CGPoint
         ) {
             tryStartNewDragGesture(from: startLocation, to: currentLocation)
-            
-            let widthOfCalloutChar: CGFloat = 8
-            
-            let initialCharBound = startLocation.x - widthOfCalloutChar / 2 ..< startLocation.x + widthOfCalloutChar / 2
-            
-            if initialCharBound.contains(currentLocation.x) {
-                selectedCharIndex = 0
-            } else {
-                selectedCharIndex = 1
-            }
 
-            action(selectedCharIndex)
+            let params = HiddenCharContextDragParameters(
+                pointX: currentLocation.x,
+                onValueSelect: { [weak self] value in
+                    self?.selectedInputValue = value
+                }
+            )
+            action(params)
         }
 
         func tryStartNewDragGesture(
@@ -147,7 +143,7 @@ public extension Gestures {
         }
 
         func reset() {
-            selectedCharIndex = 0
+            selectedInputValue = nil
         }
     }
 }

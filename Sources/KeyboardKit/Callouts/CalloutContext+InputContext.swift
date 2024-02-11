@@ -107,10 +107,16 @@ public extension CalloutContext.InputContext {
     }
 }
 
+public struct HiddenCharContextDragParameters {
+    let pointX: CGFloat
+    let onValueSelect: (String) -> Void
+}
+
 extension CalloutContext {
     public class HiddenCharContext: ObservableObject {
+        @Published var dragParams: HiddenCharContextDragParameters?
 
-        @Published var selectedCharIndex = 0
+        private var selectedValue: String?
 
         /// The coordinate space to use for callout.
         public let coordinateSpace = "com.keyboardkit.coordinate.HiddenCharAction"
@@ -133,7 +139,7 @@ extension CalloutContext {
         var input: String? {
             action?.inputCalloutText
         }
-        
+
         var alternativeInputs: [String] {
             switch action {
             case let .characterWithHidden(_, hiddenChars): return hiddenChars
@@ -150,6 +156,7 @@ extension CalloutContext {
         func reset() {
             action = nil
             buttonFrame = .zero
+            dragParams = nil
         }
 
         /// Reset the context with a slight delay.
@@ -168,6 +175,26 @@ extension CalloutContext {
             self.lastActionDate = Date()
             self.action = action
             self.buttonFrame = geo.frame(in: .named(coordinateSpace))
+        }
+
+        func isSelected(value: String, for geo: GeometryProxy) -> Bool {
+            let currentLocationX = dragParams?.pointX ?? 0
+            let calloutButtonFrame = geo.frame(in: .named(coordinateSpace))
+
+            let isLastValueInList = alternativeInputs.last == value
+            let isFirstValueInList = input == value
+            let localMinX = calloutButtonFrame.minX - buttonFrame.origin.x
+            let localMaxX = calloutButtonFrame.maxX - buttonFrame.origin.x
+
+            let isLeftBounded = currentLocationX >= localMinX || isFirstValueInList
+            let isRightBounded = currentLocationX < localMaxX || isLastValueInList
+
+            let isSelected = isLeftBounded && isRightBounded
+            if isSelected, value != selectedValue {
+                selectedValue = value
+                dragParams?.onValueSelect(value)
+            }
+            return isSelected
         }
     }
 

@@ -83,13 +83,16 @@ public extension InputSet {
     }
 
     static var qazaqSecondRow: InputSet.Row {
-        let fiv: [InputSet.Item] = InputSet.Row(chars: "фыв")
+        let f: [InputSet.Item] = InputSet.Row(chars: "ф")
+        let i: [InputSet.Item] = [InputSet.Item("ы", hidden: InputSet.Item("і"))]
+        let v: [InputSet.Item] = InputSet.Row(chars: "в")
+
         let a: [InputSet.Item] = [InputSet.Item("а", hidden: InputSet.Item("ә"))]
         let pr = InputSet.Row(chars: "пр")
         let o: [InputSet.Item] = [InputSet.Item("о", hidden: InputSet.Item("ө"))]
         let ldzhz: [InputSet.Item] = InputSet.Row(chars: "лджэ")
 
-        return fiv + a + pr + o + ldzhz
+        return f + i + v + a + pr + o + ldzhz
     }
 
     static var qazaqThirdRow: InputSet.Row {
