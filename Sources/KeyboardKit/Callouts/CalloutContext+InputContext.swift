@@ -109,8 +109,7 @@ public extension CalloutContext.InputContext {
 
 extension CalloutContext {
     public class HiddenCharContext: ObservableObject {
-        
-        @GestureState var longPress = false
+
         @Published var selectedCharIndex = 0
 
         /// The coordinate space to use for callout.
@@ -144,7 +143,7 @@ extension CalloutContext {
 
         /// Whether or not the context has input and is enabled.
         var isActive: Bool {
-            input != nil && longPress && !alternativeInputs.isEmpty
+            input != nil && !alternativeInputs.isEmpty
         }
         
         /// Reset the context. This will dismiss the callout.

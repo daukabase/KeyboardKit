@@ -215,7 +215,8 @@ public struct SystemKeyboard<
             )
             .keyboardHiddenCharContainer(
                 hiddenCharContext: hiddenCharActionContext,
-                keyboardContext: keyboardContext
+                keyboardContext: keyboardContext, 
+                inputCalloutStyle: inputCalloutStyle
             )
     }
 }

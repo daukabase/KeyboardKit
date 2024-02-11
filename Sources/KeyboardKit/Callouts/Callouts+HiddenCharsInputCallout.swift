@@ -64,7 +64,7 @@ private extension Callouts.HiddenCharCallout {
 
     @ViewBuilder
     var calloutView: some View {
-        HStack(spacing: 2) {
+        HStack(spacing: 4) {
             callInputView(value: calloutContext.input ?? "", isSelected: calloutContext.selectedCharIndex == 0)
 
             ForEach(0 ..< calloutContext.alternativeInputs.count, id: \.self) { index in
@@ -75,17 +75,18 @@ private extension Callouts.HiddenCharCallout {
             }
         }
         .frame(minWidth: calloutSize.width, minHeight: calloutSize.height)
-        .background(Color.white)
+        .padding(.horizontal, 8)
+        .background(style.callout.backgroundColor)
         .cornerRadius(cornerRadius)
     }
 
     func callInputView(value: String, isSelected: Bool) -> some View {
         Text(value)
             .font(style.font.font)
-            .frame(minWidth: 16)
+            .frame(width: buttonSize.width * 0.8, height: buttonSize.height * 0.8)
             .foregroundColor(isSelected ? Color.white : style.callout.textColor)
             .background(isSelected ? Color.blue : style.callout.backgroundColor)
-            .cornerRadius(cornerRadius)
+            .cornerRadius(style.callout.buttonCornerRadius)
     }
 
     var calloutButton: some View {
@@ -139,7 +140,11 @@ private extension Callouts.HiddenCharCallout {
     }
 
     var position: CGPoint {
-        CGPoint(x: positionX, y: positionY)
+        guard !positionX.isInfinite && !positionY.isInfinite else {
+            return .zero
+        }
+
+        return CGPoint(x: positionX, y: positionY)
     }
 
     var positionX: CGFloat {

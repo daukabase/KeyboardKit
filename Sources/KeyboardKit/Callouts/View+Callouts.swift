@@ -22,26 +22,14 @@ public extension View {
     func keyboardHiddenCharContainer(
         hiddenCharContext: CalloutContext.HiddenCharContext,
         keyboardContext: KeyboardContext,
-        actionCalloutStyle: KeyboardStyle.ActionCallout = .standard,
-        inputCalloutStyle: KeyboardStyle.InputCallout = .standard
+        inputCalloutStyle: KeyboardStyle.InputCallout
     ) -> some View {
         self
-            .gesture(
-                LongPressGesture(minimumDuration: 1)
-                .updating(hiddenCharContext.$longPress) { currentState, gestureState, transaction in
-                    print(currentState)
-                    print(gestureState)
-                    print(transaction)
-                }
-                .onEnded { value in
-                    print("ENDED: \(value)")
-                }
-            )
             .overlay(
                 Callouts.HiddenCharCallout(
                     calloutContext: hiddenCharContext,
                     keyboardContext: keyboardContext,
-                    style: .standard
+                    style: inputCalloutStyle
                 )
             ).coordinateSpace(name: hiddenCharContext.coordinateSpace)
     }
