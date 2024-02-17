@@ -253,6 +253,7 @@ open class StandardKeyboardStyleProvider: KeyboardStyleProvider {
         switch action {
         case .backspace: return .regular
         case .character(let char): return char.isLowercasedWithUppercaseVariant ? .light : nil
+        case .characterWithHidden(let char, _): return char.isLowercasedWithUppercaseVariant ? .light : nil
         default: return buttonImage(for: action) != nil ? .light : nil
         }
     }
