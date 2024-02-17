@@ -63,7 +63,7 @@ public extension InputSet {
 
         let u: [InputSet.Item] = [InputSet.Item("у", hiddenChars: [InputSet.Item("ұ"), InputSet.Item("ү")])]
         let k = [InputSet.Item("к", hidden: InputSet.Item("қ"))]
-        let e = InputSet.Row(chars: "е")
+        let e = [InputSet.Item("е", hidden: InputSet.Item("ё"))]
         let n = [InputSet.Item("н", hidden: InputSet.Item("ң"))]
         let g = [InputSet.Item("г", hidden: InputSet.Item("ғ"))]
         let shShhZ: [InputSet.Item] = InputSet.Row(chars: "шщз")
