@@ -20,7 +20,7 @@ struct DemoApp: App {
     
     var body: some Scene {
         WindowGroup {
-            HomeScreen()
+            Text("Salem Alem")
         }
     }
 }
