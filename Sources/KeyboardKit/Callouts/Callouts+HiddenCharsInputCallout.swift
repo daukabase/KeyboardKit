@@ -179,7 +179,9 @@ private extension Callouts.HiddenCharCallout {
 
     var position: CGPoint {
         guard !positionX.isInfinite && !positionY.isInfinite else {
-            return .zero
+            // when user touch up there are millisecond where
+            // user see current view and x: 500 y: 500 values set not this blink to be visible
+            return CGPoint(x: 500, y: 500)
         }
 
         return CGPoint(x: positionX, y: positionY)
