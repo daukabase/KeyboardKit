@@ -181,10 +181,11 @@ extension CalloutContext {
             let currentLocationX = dragParams?.pointX ?? 0
             let calloutButtonFrame = geo.frame(in: .named(coordinateSpace))
 
+            let spacingBetweenCalloutInputs = CGFloat(4)
             let isLastValueInList = alternativeInputs.last == value
             let isFirstValueInList = input == value
-            let localMinX = calloutButtonFrame.minX - buttonFrame.origin.x
-            let localMaxX = calloutButtonFrame.maxX - buttonFrame.origin.x
+            let localMinX = calloutButtonFrame.minX - buttonFrame.origin.x - spacingBetweenCalloutInputs / 2
+            let localMaxX = calloutButtonFrame.maxX - buttonFrame.origin.x + spacingBetweenCalloutInputs / 2
 
             let isLeftBounded = currentLocationX >= localMinX || isFirstValueInList
             let isRightBounded = currentLocationX < localMaxX || isLastValueInList

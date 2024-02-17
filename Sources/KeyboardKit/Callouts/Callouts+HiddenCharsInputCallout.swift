@@ -84,6 +84,37 @@ private extension Callouts.HiddenCharCallout {
         }
     }
 
+    func callInputView(value: String) -> some View {
+        GeometryReader { proxy in
+            callInputView(value: value, isSelected: calloutContext.isSelected(value: value, for: proxy))
+        }
+        .frame(width: buttonSize.width * 0.9, height: buttonSize.height * 0.9)
+        .cornerRadius(style.callout.buttonCornerRadius)
+    }
+
+    func callInputView(value: String, isSelected: Bool) -> some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: style.callout.buttonCornerRadius)
+                .foregroundColor(isSelected ? Color.blue : style.callout.backgroundColor)
+                .frame(width: calloutSelectionButtonSize.width, height: calloutSelectionButtonSize.height)
+            
+            Text(value)
+                .font(style.font.font)
+                .foregroundColor(isSelected ? Color.white : style.callout.textColor)
+                .offset(y: value.first?.isLowercase == true ? -4 : 0)
+        }
+    }
+
+    var calloutButton: some View {
+        Callouts.ButtonArea(
+            frame: buttonFrame,
+            style: style.callout,
+            isLeftCurveEnabled: false
+        )
+    }
+}
+
+private extension Callouts.HiddenCharCallout {
     var callInputViewsOffset: CGFloat {
         let buttonWidth = buttonFrame.width
         return (callInputViewsWidth - buttonWidth) / 2
@@ -97,33 +128,6 @@ private extension Callouts.HiddenCharCallout {
         return items * calloutButtonWidth + spacing + padding
     }
 
-    func callInputView(value: String, isSelected: Bool) -> some View {
-        Text(value)
-            .font(style.font.font)
-            .frame(width: calloutSelectionButtonSize.width, height: calloutSelectionButtonSize.height)
-            .foregroundColor(isSelected ? Color.white : style.callout.textColor)
-            .background(isSelected ? Color.blue : style.callout.backgroundColor)
-            .cornerRadius(style.callout.buttonCornerRadius)
-    }
-
-    func callInputView(value: String) -> some View {
-        GeometryReader { proxy in
-            callInputView(value: value, isSelected: calloutContext.isSelected(value: value, for: proxy))
-        }
-        .frame(width: buttonSize.width * 0.9, height: buttonSize.height * 0.9)
-        .cornerRadius(style.callout.buttonCornerRadius)
-    }
-
-    var calloutButton: some View {
-        Callouts.ButtonArea(
-            frame: buttonFrame,
-            style: style.callout,
-            isLeftCurveEnabled: false
-        )
-    }
-}
-
-private extension Callouts.HiddenCharCallout {
     var buttonFrame: CGRect {
         calloutContext.buttonFrame.insetBy(
             dx: buttonInset.width,
@@ -204,8 +208,8 @@ extension View {
         clipShape( RoundedCorner(radius: radius, corners: corners) )
     }
 }
-struct RoundedCorner: Shape {
 
+struct RoundedCorner: Shape {
     var radius: CGFloat = .infinity
     var corners: UIRectCorner = .allCorners
 
