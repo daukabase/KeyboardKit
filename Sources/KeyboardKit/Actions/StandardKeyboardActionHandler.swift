@@ -320,8 +320,7 @@ open class StandardKeyboardActionHandler: NSObject, KeyboardActionHandler {
         before gesture: Gesture,
         on action: KeyboardAction
     ) {
-        if isSpaceCursorDrag(action) { return }
-        if keyboardContext.isCursorAtNewWord { return }
+        guard keyboardContext.textDocumentProxy.isCursorAtTheEndOfTheCurrentWord else { return }
         guard gesture == .release else { return }
         guard action.shouldApplyAutocorrectSuggestion else { return }
         let suggestions = autocompleteContext.suggestions
